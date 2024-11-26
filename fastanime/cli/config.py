@@ -427,7 +427,7 @@ recent = {self.recent}
 
 # enable or disable discord activity updater
 # if you want to enable it, please follow the lnik below to register the app with discord account
-# https://discord.com/oauth2/authorize?client_id=1310622369022476428
+# https://discord.com/oauth2/authorize?client_id=1292070065583165512
 discord = {self.discord}
 
 [stream]
