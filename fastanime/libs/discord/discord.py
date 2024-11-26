@@ -1,16 +1,14 @@
 from discordrp import Presence
 import time
 
-def discord_connect(show, episode):
-    client_id = '1292070065583165512'
-
-    with Presence(client_id) as presence:
+def discord_connect(show, episode, switch):
+    presence = Presence(client_id = '1292070065583165512')
+    if not switch.is_set():
         presence.set(
             {
                 "type": 3,
                 "details": show,
-                "state": "Watching episode "+episode,
+                "state": "Watching "+episode,
             }
         )
-        while True:
-            time.sleep(15)
+        time.sleep(10)

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import random
-import multiprocessing
+import threading
 from typing import TYPE_CHECKING
 
 from click import clear
@@ -35,8 +35,8 @@ if TYPE_CHECKING:
     from ..config import Config
     from ..utils.tools import FastAnimeRuntimeState
 
-def discord_updater(show,episode):
-    discord.discord_connect(show,episode)
+def discord_updater(show,episode,switch):
+    discord.discord_connect(show,episode,switch)
 
 def calculate_percentage_completion(start_time, end_time):
     """helper function used to calculate the difference between two timestamps in seconds
@@ -514,7 +514,8 @@ def provider_anime_episode_servers_menu(
 
     # update discord activity for user
     if config.discord == True:
-        discord_proc = multiprocessing.Process(target=discord_updater,args=(provider_anime_title,current_episode_number))
+        switch = threading.Event()
+        discord_proc = threading.Thread(target=discord_updater, args=(provider_anime_title,current_episode_number,switch))
         discord_proc.start()
 
     # try to get the timestamp you left off from if available
@@ -601,7 +602,7 @@ def provider_anime_episode_servers_menu(
 
     # stop discord activity updater
     if config.discord == True:
-        discord_proc.terminate()
+        switch.set()
 
     # update_watch_history
     # this will try to update the episode to be the next episode if delta has reached a specific threshhold
